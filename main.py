@@ -7,16 +7,22 @@ pygame.display.set_caption("=== Galangal ===")
 
 BLUE = (63, 127, 255)
 
+FPS = 60
+
+def draw_window():
+    WIN.fill(BLUE)
+    pygame.display.update()
+
 def main():
+    clock = pygame.time.Clock()
     running = True
     while running:
+        clock.tick(FPS)
         for event in pygame.event.get():
             print(event)
             if event.type == pygame.QUIT:
                 running = False
-
-        WIN.fill(BLUE)
-        pygame.display.update()
+        draw_window()
     
     pygame.quit()
 
