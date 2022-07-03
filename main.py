@@ -10,39 +10,39 @@ BLUE = (63, 127, 255)
 
 FPS = 60
 
-PLATE_IMAGE = pygame.image.load("Assets/plate.png")
-PLATE_WIDTH = PLATE_IMAGE.get_width()
-PLATE_X = 450
-PLATE_LEFT = False
-PLATE_RIGHT = False
-PLATE_SPEED = 5
+PLAYER_IMAGE = pygame.image.load("Assets/plate.png")
+PLAYER_WIDTH = PLAYER_IMAGE.get_width()
+PLAYER_X = 450
+PLAYER_LEFT = False
+PLAYER_RIGHT = False
+PLAYER_SPEED = 5
 
 def draw_window():
     WIN.fill(BLUE)
-    WIN.blit(PLATE_IMAGE, (PLATE_X, 400))
+    WIN.blit(PLAYER_IMAGE, (PLAYER_X, 400))
     pygame.display.update()
 
 def handle_key_down(key):
-    global PLATE_LEFT, PLATE_RIGHT
+    global PLAYER_LEFT, PLAYER_RIGHT
     if key == pygame.K_LEFT:
-        PLATE_LEFT = True
+        PLAYER_LEFT = True
     elif key == pygame.K_RIGHT:
-        PLATE_RIGHT = True
+        PLAYER_RIGHT = True
 
 def handle_key_up(key):
-    global PLATE_LEFT, PLATE_RIGHT
+    global PLAYER_LEFT, PLAYER_RIGHT
     if key == pygame.K_LEFT:
-        PLATE_LEFT = False
+        PLAYER_LEFT = False
     elif key == pygame.K_RIGHT:
-        PLATE_RIGHT = False
+        PLAYER_RIGHT = False
 
 def physics():
-    global PLATE_X, PLATE_LEFT, PLATE_RIGHT
-    if PLATE_LEFT:
-        PLATE_X -= PLATE_SPEED
-    if PLATE_RIGHT:
-        PLATE_X += PLATE_SPEED
-    PLATE_X = max(0, min(900 - PLATE_WIDTH, PLATE_X))
+    global PLAYER_X, PLAYER_LEFT, PLAYER_RIGHT
+    if PLAYER_LEFT:
+        PLAYER_X -= PLAYER_SPEED
+    if PLAYER_RIGHT:
+        PLAYER_X += PLAYER_SPEED
+    PLAYER_X = max(0, min(900 - PLAYER_WIDTH, PLAYER_X))
 
 def main():
     clock = pygame.time.Clock()
