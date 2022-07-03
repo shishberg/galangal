@@ -75,16 +75,16 @@ def draw_window():
 
 def handle_key_down(key):
     global KEY_LEFT, KEY_RIGHT
-    if key == pygame.K_LEFT:
+    if key == pygame.K_LEFT or key == pygame.K_a:
         KEY_LEFT = True
-    elif key == pygame.K_RIGHT:
+    elif key == pygame.K_RIGHT or key == pygame.K_d:
         KEY_RIGHT = True
 
 def handle_key_up(key):
     global KEY_LEFT, KEY_RIGHT
-    if key == pygame.K_LEFT:
+    if key == pygame.K_LEFT or key == pygame.K_a:
         KEY_LEFT = False
-    elif key == pygame.K_RIGHT:
+    elif key == pygame.K_RIGHT or key == pygame.K_d:
         KEY_RIGHT = False
 
 def physics():
