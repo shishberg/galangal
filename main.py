@@ -27,16 +27,48 @@ class Player(object):
             self.x -= self.speed
         if KEY_RIGHT:
             self.x += self.speed
-        self.x = max(0, min(900 - self.width, self.x))
+        self.x = max(0, min(SCREEN_SIZE[0] - self.width, self.x))
 
     def draw(self, win):
         win.blit(self.image, (self.x, self.y))
 
+class Enemy(object):
+    def __init__(self):
+        self.image = pygame.image.load("Assets/potato.png")
+        self.width = self.image.get_width()
+        self.x = 450
+        self.y = 50
+        self.x_accel = 0
+        self.x_vel = 10
+        self.y_accel = 0
+        self.y_vel = 2
+
+    def update(self):
+        if self.x < SCREEN_SIZE[0]/2:
+            self.x_accel = 0.15
+        else:
+            self.x_accel = -0.15
+        self.x_vel += self.x_accel
+        self.x += self.x_vel
+
+        if self.y < SCREEN_SIZE[1]/5:
+            self.y_accel = 0.3
+        else:
+            self.y_accel = -0.3
+        self.y_vel += self.y_accel
+        self.y += self.y_vel
+
+    def draw(self, win):
+        win.blit(self.image, (self.x, self.y))
+
+
 PLAYER = Player()
+ENEMY = Enemy()
 
 def draw_window():
     WIN.fill(BLUE)
     PLAYER.draw(WIN)
+    ENEMY.draw(WIN)
     pygame.display.update()
 
 def handle_key_down(key):
@@ -55,6 +87,7 @@ def handle_key_up(key):
 
 def physics():
     PLAYER.update()
+    ENEMY.update()
 
 def main():
     clock = pygame.time.Clock()
