@@ -6,7 +6,7 @@ SCREEN_SIZE = (900, 500)
 WIN = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("=== Galangal ===")
 
-BLUE = (63, 127, 255)
+BLUE = (15, 31, 63)
 
 FPS = 60
 
