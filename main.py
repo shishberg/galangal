@@ -1,5 +1,5 @@
 import pygame
-import os
+import random
 
 # Screen size
 SCREEN_SIZE = (900, 500)
@@ -33,15 +33,15 @@ class Player(object):
         win.blit(self.image, (self.x, self.y))
 
 class Enemy(object):
-    def __init__(self):
+    def __init__(self, x, y):
         self.image = pygame.image.load("Assets/potato.png")
         self.width = self.image.get_width()
-        self.x = 450
-        self.y = 50
+        self.x = x
+        self.y = y
         self.x_accel = 0
-        self.x_vel = 10
+        self.x_vel = 0
         self.y_accel = 0
-        self.y_vel = 2
+        self.y_vel = 0
 
     def update(self):
         if self.x < SCREEN_SIZE[0]/2:
@@ -63,12 +63,14 @@ class Enemy(object):
 
 
 PLAYER = Player()
-ENEMY = Enemy()
+ENEMIES = [Enemy(random.randint(0, SCREEN_SIZE[0]), random.randint(0, SCREEN_SIZE[1]/2))
+           for _ in range(20)]
 
 def draw_window():
     WIN.fill(BLUE)
     PLAYER.draw(WIN)
-    ENEMY.draw(WIN)
+    for enemy in ENEMIES:
+        enemy.draw(WIN)
     pygame.display.update()
 
 def handle_key_down(key):
@@ -87,7 +89,8 @@ def handle_key_up(key):
 
 def physics():
     PLAYER.update()
-    ENEMY.update()
+    for enemy in ENEMIES:
+        enemy.update()
 
 def main():
     clock = pygame.time.Clock()
