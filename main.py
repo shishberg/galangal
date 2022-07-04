@@ -127,7 +127,6 @@ def main():
     while running:
         clock.tick(FPS)
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
