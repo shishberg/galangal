@@ -1,4 +1,5 @@
 import pygame
+import os
 import random
 
 # Screen size
@@ -13,29 +14,11 @@ FPS = 60
 KEY_LEFT = False
 KEY_RIGHT = False
 
-class Player(object):
-    def __init__(self):
-        self.image = pygame.image.load("Assets/plate.png")
+class GameObject(object):
+    def __init__(self, x, y, image_filename):
+        self.image = pygame.image.load(os.path.join("Assets", image_filename))
         self.width = self.image.get_width()
-        self.x = 450
-        self.y = 400
-        self.speed = 5
-
-    def update(self):
-        global KEY_LEFT, KEY_RIGHT
-        if KEY_LEFT:
-            self.x -= self.speed
-        if KEY_RIGHT:
-            self.x += self.speed
-        self.x = max(0, min(SCREEN_SIZE[0] - self.width, self.x))
-
-    def draw(self, win):
-        win.blit(self.image, (self.x, self.y))
-
-class Enemy(object):
-    def __init__(self, x, y):
-        self.image = pygame.image.load("Assets/potato.png")
-        self.width = self.image.get_width()
+        self.height = self.image.get_height()
         self.x = x
         self.y = y
         self.x_accel = 0
@@ -44,26 +27,48 @@ class Enemy(object):
         self.y_vel = 0
 
     def update(self):
-        if self.x < SCREEN_SIZE[0]/2:
-            self.x_accel = 0.15
-        else:
-            self.x_accel = -0.15
         self.x_vel += self.x_accel
         self.x += self.x_vel
-
-        if self.y < SCREEN_SIZE[1]/5:
-            self.y_accel = 0.3
-        else:
-            self.y_accel = -0.3
         self.y_vel += self.y_accel
         self.y += self.y_vel
 
     def draw(self, win):
-        win.blit(self.image, (self.x, self.y))
+        win.blit(self.image, (self.x - self.width // 2, self.y - self.height // 2))
+
+
+class Player(GameObject):
+    def __init__(self):
+        GameObject.__init__(self, 450, 450, "plate.png")
+        self.speed = 5
+
+    def update(self):
+        global KEY_LEFT, KEY_RIGHT
+        if KEY_LEFT:
+            self.x -= self.speed
+        if KEY_RIGHT:
+            self.x += self.speed
+        self.x = max(50, min(SCREEN_SIZE[0] - 50, self.x))
+
+class Enemy(GameObject):
+    def __init__(self, x, y):
+        GameObject.__init__(self, x, y, "potato.png")
+
+    def update(self):
+        if self.x < SCREEN_SIZE[0]/2:
+            self.x_accel = 0.15
+        else:
+            self.x_accel = -0.15
+
+        if self.y < SCREEN_SIZE[1]/3:
+            self.y_accel = 0.3
+        else:
+            self.y_accel = -0.3
+
+        GameObject.update(self)
 
 
 PLAYER = Player()
-ENEMIES = [Enemy(random.randint(0, SCREEN_SIZE[0]), random.randint(0, SCREEN_SIZE[1]/2))
+ENEMIES = [Enemy(random.randint(50, SCREEN_SIZE[0]-50), random.randint(50, SCREEN_SIZE[1]*2//3))
            for _ in range(20)]
 
 def draw_window():
