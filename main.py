@@ -15,16 +15,16 @@ KEY_LEFT = False
 KEY_RIGHT = False
 
 class GameObject(object):
-    def __init__(self, x, y, image_filename):
+    def __init__(self, x, y, image_filename, x_vel=0, y_vel=0):
         self.image = pygame.image.load(os.path.join("Assets", image_filename))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.x = x
         self.y = y
         self.x_accel = 0
-        self.x_vel = 0
+        self.x_vel = x_vel
         self.y_accel = 0
-        self.y_vel = 0
+        self.y_vel = y_vel
 
     def update(self):
         self.x_vel += self.x_accel
@@ -36,10 +36,20 @@ class GameObject(object):
         win.blit(self.image, (self.x - self.width // 2, self.y - self.height // 2))
 
 
+class Bullet(GameObject):
+    def __init__(self, player, x, y, y_vel):
+        GameObject.__init__(self, x, y, "fork.png", y_vel=-10)
+
+
 class Player(GameObject):
     def __init__(self):
         GameObject.__init__(self, 450, 450, "plate.png")
         self.speed = 5
+        self.projectiles = []
+    
+    def fire(self):
+        bullet = Bullet(self, self.x, self.y-30, 10)
+        self.projectiles.append(bullet)
 
     def update(self):
         global KEY_LEFT, KEY_RIGHT
@@ -48,6 +58,17 @@ class Player(GameObject):
         if KEY_RIGHT:
             self.x += self.speed
         self.x = max(50, min(SCREEN_SIZE[0] - 50, self.x))
+
+        for projectile in self.projectiles:
+            projectile.update()
+        self.projectiles = [p for p in self.projectiles if p.y > -10]
+
+    
+    def draw(self, win):
+        GameObject.draw(self, win)
+        for projectile in self.projectiles:
+            projectile.draw(win)
+
 
 class Enemy(GameObject):
     def __init__(self, x, y):
@@ -71,6 +92,7 @@ PLAYER = Player()
 ENEMIES = [Enemy(random.randint(50, SCREEN_SIZE[0]-50), random.randint(50, SCREEN_SIZE[1]*2//3))
            for _ in range(20)]
 
+
 def draw_window():
     WIN.fill(BLUE)
     PLAYER.draw(WIN)
@@ -91,6 +113,8 @@ def handle_key_up(key):
         KEY_LEFT = False
     elif key == pygame.K_RIGHT or key == pygame.K_d:
         KEY_RIGHT = False
+    elif key == pygame.K_SPACE:
+        PLAYER.fire()
 
 def physics():
     PLAYER.update()
@@ -103,7 +127,7 @@ def main():
     while running:
         clock.tick(FPS)
         for event in pygame.event.get():
-            print(event)
+            # print(event)
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
