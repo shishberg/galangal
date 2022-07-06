@@ -3,7 +3,7 @@ import os
 import random
 
 # Screen size
-SCREEN_SIZE = (900, 500)
+SCREEN_SIZE = (500, 900)
 WIN = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("=== Galangal ===")
 
@@ -43,7 +43,7 @@ class Bullet(GameObject):
 
 class Player(GameObject):
     def __init__(self):
-        GameObject.__init__(self, 450, 450, "plate.png")
+        GameObject.__init__(self, SCREEN_SIZE[0]/2, SCREEN_SIZE[1]-100, "plate.png")
         self.speed = 5
         self.projectiles = []
     
