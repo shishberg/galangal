@@ -3,7 +3,7 @@ import os
 import random
 
 # Screen size
-SCREEN_SIZE = (500, 900)
+SCREEN_SIZE = (400, 700)
 WIN = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("=== Galangal ===")
 
